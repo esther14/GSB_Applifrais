@@ -1,40 +1,4 @@
 <?php
-/**
- * Classe d'accès aux données.
- *
- * PHP Version 7
- *
- * @category  PPE
- * @package   GSB
- * @author    Cheri Bibi - Réseau CERTA <contact@reseaucerta.org>
- * @author    José GIL - CNED <jgil@ac-nice.fr>
- * @copyright 2017 Réseau CERTA
- * @license   Réseau CERTA
- * @version   GIT: <0>
- * @link      http://www.php.net/manual/fr/book.pdo.php PHP Data Objects sur php.net
- */
-
-/**
- * Classe d'accès aux données.
- *
- * Utilise les services de la classe PDO
- * pour l'application GSB
- * Les attributs sont tous statiques,
- * les 4 premiers pour la connexion
- * $monPdo de type PDO
- * $monPdoGsb qui contiendra l'unique instance de la classe
- *
- * PHP Version 7
- *
- * @category  PPE
- * @package   GSB
- * @author    Cheri Bibi - Réseau CERTA <contact@reseaucerta.org>
- * @author    José GIL <jgil@ac-nice.fr>
- * @copyright 2017 Réseau CERTA
- * @license   Réseau CERTA
- * @version   Release: 1.0
- * @link      http://www.php.net/manual/fr/book.pdo.php PHP Data Objects sur php.net
- */
 
 class PdoGsb
 {
@@ -103,6 +67,21 @@ class PdoGsb
         $requetePrepare->execute();
         return $requetePrepare->fetch();
     }
+      public function getInfosComptable($login, $mdp)
+    {
+        $requetePrepare = PdoGsb::$monPdo->prepare(
+            'SELECT comptable.id AS id, comptable.nom AS nom, '
+            . 'comptable.prenom AS prenom '
+            . 'FROM comptable '
+            . 'WHERE comptable.login = :unLogin AND comptable.mdp = :unMdp'
+        );
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
+    }
+    
+    
 
     /**
      * Retourne sous forme d'un tableau associatif toutes les lignes de frais
